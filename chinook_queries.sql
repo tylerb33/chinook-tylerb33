@@ -99,10 +99,18 @@ GROUP BY emp.FirstName
 ORDER BY SUM(inv.Total) DESC) as Basis;
 
 --20 Which sales agent made the most in sales over all?
-
+SELECT emp.FirstName, emp.LastName, SUM(inv.Total)
+FROM Employee emp 
+LEFT JOIN Customer cust ON emp.EmployeeId = cust.SupportRepId
+LEFT JOIN Invoice inv ON inv.CustomerId = cust.CustomerId
+ORDER BY SUM(inv.Total) DESC LIMIT 1;
 
 -- Provide a query that shows the count of customers assigned to each sales agent.
-
+SELECT emp.FirstName, emp.LastName, COUNT(cust.SupportRepId) as 'Total Cases'
+FROM Employee emp
+LEFT JOIN Customer cust ON emp.EmployeeId = cust.SupportRepId
+GROUP BY emp.EmployeeId
+ORDER BY COUNT(cust.SupportRepId) DESC;
 
 -- Provide a query that shows the total sales per country.
 SELECT BillingCountry, SUM(Total)
@@ -127,7 +135,7 @@ SELECT t.Name 'Track', COUNT(*) 'Purchases'
 FROM Track t, Invoice I, InvoiceLine il
 WHERE t.TrackId = il.TrackId and i.InvoiceId = il.InvoiceId 
 GROUP BY t.TrackId
-ORDER BY COUNT(*) desc limit 5
+ORDER BY COUNT(*) desc limit 5;
 
 -- Provide a query that shows the top 3 best selling artists.
 SELECT art.Name, tr.Name, SUM(inv.UnitPrice)
