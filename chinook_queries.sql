@@ -85,7 +85,12 @@ FROM Invoice inv LEFT JOIN InvoiceLine line ON inv.InvoiceId = line.InvoiceId
 GROUP BY inv.InvoiceId;
 
 -- Provide a query that shows total sales made by each sales agent.
-
+SELECT emp.FirstName as 'First Name', emp.LastName as 'Last Name', SUM(inv.Total) as 'Total Sales'
+FROM Employee emp LEFT JOIN Customer cust ON emp.EmployeeId = cust.SupportRepId
+LEFT JOIN Invoice inv ON inv.CustomerId = cust.CustomerId
+WHERE emp.Title LIKE "Sales%"
+GROUP BY emp.EmployeeId
+ORDER BY SUM(inv.Total) DESC;
 
 -- Which sales agent made the most in sales in 2009?
 --     Hint: Use the MAX function on a subquery.
